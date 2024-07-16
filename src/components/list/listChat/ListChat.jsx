@@ -1,9 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './listChat.css';
 import AddUser from '../addUser/AddUser';
+import { userStore } from '../../../lib/userStore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../../lib/firebase';
 
 const ListChat = () => {
     const [addMode, setAddMode] = useState(false);
+    const [chats, setChats] = useState([]);
+    console.log('chats -->', chats);
+
+    const { currentUser } = userStore();
+
+    useEffect(() => {
+        const unsub = onSnapshot(doc(db, 'userChats', currentUser.id), async (res) => {
+            const data = res.data();
+            if (data && Array.isArray(data.chats)) {
+                const items = data.chats;
+
+                const promises = items?.map(async (item) => {
+                    const userDocRef = await doc(db, 'users', item.receiverId);
+                    const userDocSnap = await getDoc(userDocRef);
+                    const user = userDocSnap.data();
+                    return { ...item, user };
+                });
+
+                const chatData = await Promise.all(promises);
+                setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
+            } else {
+                setChats([]);
+            }
+        });
+
+        return () => {
+            unsub();
+        };
+    }, [currentUser.id]);
 
     return (
         <div className='listChat'>
@@ -25,34 +57,15 @@ const ListChat = () => {
             </div>
 
             {/* list chat */}
-            <div className='item'>
-                <img src='./avatar.png' alt='' />
-                <div className='texts'>
-                    <span>Huy Shelby</span>
-                    <p>Hello my friend</p>
+            {chats.map((chat) => (
+                <div className='item' key={chat.chatId}>
+                    <img src={chat.user.avatar || './avatar.png'} alt='' />
+                    <div className='texts'>
+                        <span>{chat.user.username}</span>
+                        <p>{chat.lastMessage}</p>
+                    </div>
                 </div>
-            </div>
-            <div className='item'>
-                <img src='./avatar.png' alt='' />
-                <div className='texts'>
-                    <span>Huy Shelby</span>
-                    <p>Hello my friend</p>
-                </div>
-            </div>
-            <div className='item'>
-                <img src='./avatar.png' alt='' />
-                <div className='texts'>
-                    <span>Huy Shelby</span>
-                    <p>Hello my friend</p>
-                </div>
-            </div>
-            <div className='item'>
-                <img src='./avatar.png' alt='' />
-                <div className='texts'>
-                    <span>Huy Shelby</span>
-                    <p>Hello my friend</p>
-                </div>
-            </div>
+            ))}
 
             {addMode && <AddUser />}
         </div>

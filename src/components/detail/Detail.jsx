@@ -1,6 +1,10 @@
 import './detail.css';
+import { userStore } from '../../lib/userStore';
+import { auth } from '../../lib/firebase';
 
 const Detail = () => {
+    const { currentUser, isLoading, fetchUserInfo } = userStore();
+
     return (
         <div className='detail'>
             {/* user */}
@@ -102,7 +106,10 @@ const Detail = () => {
                 <button className='bg-red-500 rounded-md py-2 hover:bg-red-600 transition duration-200'>
                     Block User
                 </button>
-                <button className='bg-blue-500 rounded-md py-2 hover:bg-blue-600 transition duration-200'>
+                <button
+                    onClick={() => auth.signOut()}
+                    className='bg-blue-500 rounded-md py-2 hover:bg-blue-600 transition duration-200'
+                >
                     Logout
                 </button>
             </div>
