@@ -60,6 +60,7 @@
         display: flex;
         flex: 1;
         flex-direction: column;
+        gap: 10px;
         overflow-x: auto;
         overflow-y: visible;
 
@@ -160,6 +161,10 @@
             font-size: 16px;
             padding: 20px;
             border-radius: 10px;
+
+            &:disabled {
+                cursor: not-allowed;
+            }
         }
 
         .emoji {
@@ -179,6 +184,11 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+
+            &:disabled {
+                background-color: #5183fe50;
+                cursor: not-allowed;
+            }
         }
     }
 }

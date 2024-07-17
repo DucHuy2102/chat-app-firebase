@@ -1,17 +1,13 @@
 import { useEffect } from 'react';
-import {
-    Chat,
-    Detail,
-    List,
-    Login,
-    Notification,
-} from './components/exportComponents';
+import { Chat, Detail, List, Login, Notification } from './components/exportComponents';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './lib/firebase';
 import { userStore } from './lib/userStore';
+import { chatStore } from './lib/chatStore';
 
 const App = () => {
     const { currentUser, isLoading, fetchUserInfo } = userStore();
+    const { chatId } = chatStore();
 
     useEffect(() => {
         const unSubmit = onAuthStateChanged(auth, (user) => {
@@ -32,8 +28,8 @@ const App = () => {
             {currentUser ? (
                 <>
                     <List />
-                    <Chat />
-                    <Detail />
+                    {chatId && <Chat />}
+                    {chatId && <Detail />}
                 </>
             ) : (
                 <Login />

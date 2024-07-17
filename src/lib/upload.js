@@ -10,8 +10,7 @@ const upload = async (file) => {
         uploadTask.on(
             'state_changed',
             (snapshot) => {
-                const progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload is ' + progress + '% done');
             },
             (error) => {

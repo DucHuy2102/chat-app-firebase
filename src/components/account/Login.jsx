@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { FaGoogle, FaFacebookF } from 'react-icons/fa';
-import './login.css';
 import { toast } from 'react-toastify';
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-} from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import upload from '../../lib/upload';
@@ -50,11 +46,7 @@ const Login = () => {
         const { username, email, password } = Object.fromEntries(formData);
 
         try {
-            const res = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            const res = await createUserWithEmailAndPassword(auth, email, password);
 
             const imgURL = await upload(avatar.file);
 
@@ -88,13 +80,9 @@ const Login = () => {
                         Welcome to {showRegister ? 'Register' : 'Login'}
                     </span>
                     {showRegister ? (
-                        <span className='text-lg text-white mb-6'>
-                            Already have an account?
-                        </span>
+                        <span className='text-lg text-white mb-6'>Already have an account?</span>
                     ) : (
-                        <span className='text-lg text-white mb-6'>
-                            Don&apos;t have an account?
-                        </span>
+                        <span className='text-lg text-white mb-6'>Don&apos;t have an account?</span>
                     )}
                     <button
                         onClick={() => setShowRegister(!showRegister)}
@@ -106,9 +94,7 @@ const Login = () => {
             ) : (
                 <div className='flex-1 flex flex-col justify-center items-center bg-white p-10 rounded-l-md '>
                     <div className='w-[80%] flex justify-between items-center mb-8'>
-                        <span className='text-3xl font-semibold text-gray-800'>
-                            Sign in
-                        </span>
+                        <span className='text-3xl font-semibold text-gray-800'>Sign in</span>
                         <div className='flex gap-4'>
                             <FaFacebookF
                                 size={40}
@@ -122,9 +108,7 @@ const Login = () => {
                     </div>
                     <form onSubmit={handleLogin} className='w-[80%] mx-auto'>
                         <div className='w-full flex flex-col gap-1 mb-4'>
-                            <label className='text-lg font-medium text-gray-700'>
-                                Email
-                            </label>
+                            <label className='text-lg font-medium text-gray-700'>Email</label>
                             <input
                                 name='email'
                                 type='text'
@@ -133,9 +117,7 @@ const Login = () => {
                             />
                         </div>
                         <div className='w-full flex flex-col gap-1 mb-6'>
-                            <label className='text-lg font-medium text-gray-700'>
-                                Password
-                            </label>
+                            <label className='text-lg font-medium text-gray-700'>Password</label>
                             <input
                                 name='password'
                                 type='password'
@@ -177,13 +159,9 @@ const Login = () => {
                         Welcome to {showRegister ? 'Register' : 'Login'}
                     </span>
                     {showRegister ? (
-                        <span className='text-lg text-white mb-6'>
-                            Already have an account?
-                        </span>
+                        <span className='text-lg text-white mb-6'>Already have an account?</span>
                     ) : (
-                        <span className='text-lg text-white mb-6'>
-                            Don&apos;t have an account?
-                        </span>
+                        <span className='text-lg text-white mb-6'>Don&apos;t have an account?</span>
                     )}
                     <button
                         onClick={() => setShowRegister(!showRegister)}
@@ -198,9 +176,7 @@ const Login = () => {
             {showRegister && (
                 <div className='flex-1 flex flex-col justify-center items-center bg-white p-10 rounded-r-md'>
                     <div className='w-[80%] flex justify-between items-center mb-8'>
-                        <span className='text-3xl font-semibold text-gray-800'>
-                            Sign Up
-                        </span>
+                        <span className='text-3xl font-semibold text-gray-800'>Sign Up</span>
                         <div className='flex gap-4 rounded-full'>
                             <label htmlFor='avatar'>
                                 <img
@@ -212,16 +188,14 @@ const Login = () => {
                             <input
                                 type='file'
                                 id='avatar'
-                                onClick={handleSetAvatar}
+                                onChange={handleSetAvatar}
                                 className='hidden'
                             />
                         </div>
                     </div>
                     <form onSubmit={handleRegister} className='w-[80%] mx-auto'>
                         <div className='w-full flex flex-col gap-1 mb-4'>
-                            <label className='text-lg font-medium text-gray-700'>
-                                Username
-                            </label>
+                            <label className='text-lg font-medium text-gray-700'>Username</label>
                             <input
                                 name='username'
                                 type='text'
@@ -230,9 +204,7 @@ const Login = () => {
                             />
                         </div>
                         <div className='w-full flex flex-col gap-1 mb-4'>
-                            <label className='text-lg font-medium text-gray-700'>
-                                Email
-                            </label>
+                            <label className='text-lg font-medium text-gray-700'>Email</label>
                             <input
                                 name='email'
                                 type='text'
@@ -241,9 +213,7 @@ const Login = () => {
                             />
                         </div>
                         <div className='w-full flex flex-col gap-1 mb-6'>
-                            <label className='text-lg font-medium text-gray-700'>
-                                Password
-                            </label>
+                            <label className='text-lg font-medium text-gray-700'>Password</label>
                             <input
                                 name='password'
                                 type='password'

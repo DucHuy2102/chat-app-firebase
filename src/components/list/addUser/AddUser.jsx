@@ -16,10 +16,10 @@ import { userStore } from '../../../lib/userStore';
 
 const AddUser = () => {
     const { currentUser } = userStore();
-    const [addUser, setAddUser] = useState(null);
-    console.log('addUser -->', addUser);
+    const [searchUser, setSearchUser] = useState(null);
+    console.log('searchUser -->', searchUser);
 
-    const handleAddNewUser = async (e) => {
+    const handleSearchUser = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const username = formData.get('username');
@@ -30,14 +30,14 @@ const AddUser = () => {
             const querySnapShot = await getDocs(q);
 
             if (!querySnapShot.empty) {
-                setAddUser(querySnapShot.docs[0].data());
+                setSearchUser(querySnapShot.docs[0].data());
             }
         } catch (error) {
             console.log(error);
         }
     };
 
-    const handleAddChat = async () => {
+    const handleAddUserChat = async () => {
         const chatRef = collection(db, 'chats');
         const userChatRef = collection(db, 'userChats');
 
@@ -47,7 +47,7 @@ const AddUser = () => {
                 createdAt: serverTimestamp(),
                 message: [],
             });
-            await updateDoc(doc(userChatRef, addUser.id), {
+            await updateDoc(doc(userChatRef, searchUser.id), {
                 chats: arrayUnion({
                     chatId: newChatRef.id,
                     receiverId: currentUser.id,
@@ -58,7 +58,7 @@ const AddUser = () => {
             await updateDoc(doc(userChatRef, currentUser.id), {
                 chats: arrayUnion({
                     chatId: newChatRef.id,
-                    receiverId: addUser.id,
+                    receiverId: searchUser.id,
                     lastMessage: '',
                     updatedAt: Date.now(),
                 }),
@@ -70,18 +70,18 @@ const AddUser = () => {
 
     return (
         <div className='addUser'>
-            <form onSubmit={handleAddNewUser}>
+            <form onSubmit={handleSearchUser}>
                 <input type='text' placeholder='Username' name='username' />
                 <button>Search</button>
             </form>
 
-            {addUser && (
+            {searchUser && (
                 <div className='user'>
                     <div className='detail'>
-                        <img src={addUser.avatar || './avatar.png'} alt='' />
-                        <span>{addUser.username}</span>
+                        <img src={searchUser.avatar || './avatar.png'} alt='' />
+                        <span>{searchUser.username}</span>
                     </div>
-                    <button onClick={handleAddChat}>Add User</button>
+                    <button onClick={handleAddUserChat}>Add User</button>
                 </div>
             )}
         </div>
